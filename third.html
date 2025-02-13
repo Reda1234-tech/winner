@@ -96,124 +96,96 @@
     </div>
     <div id="winner-name"></div>
     <div class="matrix" id="matrix"></div>
-    <audio id="drumroll" src="drumroll.mp3"  preload="auto"></audio>
-    <audio id="cheer" src="cheer.mp3"  preload="auto"></audio>
+    <audio id="drumroll" src="drumroll.mp3"></audio>
+    <audio id="cheer" src="cheer.mp3"></audio>
 
     <script>
-            let names = [11:33 ص، 2025/2/13] روان عمر: ['Abdalla Mohamed',
-       'Abdullah Mohamed',
-       'Anne Marie',
-       'Ashraf Hussien',
-       'Asmaa Mostafa',
-       'Aya Sayed',
-       'Basma Mohammad',
-       'Eman Abdelhagag',
-       'Eman Faiz',
-       'Fatma Nagar',
-       'Lames Ahmed',
-       'Mahmoud abdelhamid',
-       'Manar Hassan',
-       'Manar Sayed',
-       'Maryam Mohamed',
-       'Mayar Ramadan',
-       'Mohamed Hany',
-       'Mohammed Khaled',
-       'Nadeen Ahmed',
-       'Omima Youssef',
-       'Retaj yasser',
-       'Safaa khaili',
-       'Samar Abdelrazek',
-       'Samira Mostafa',
-       'Shams Ayman',
-       'Wageeda Mohamed',
-       'Yousef sherif',
-       'Youssef Mohamed',
-       'haya gamal']
-      [11:35 ص، 2025/2/13] روان عمر: fourth session
+      let names = [
+        "Abdalla Mohamed",
+        "Abdullah Mohamed",
+        "Anne Marie",
+        "Ashraf Hussien",
+        "Asmaa Mostafa",
+        "Aya Sayed",
+        "Basma Mohammad",
+        "Eman Abdelhagag",
+        "Eman Faiz",
+        "Fatma Nagar",
+        "Lames Ahmed",
+        "Mahmoud abdelhamid",
+        "Manar Hassan",
+        "Manar Sayed",
+        "Maryam Mohamed",
+        "Mayar Ramadan",
+        "Mohamed Hany",
+        "Mohammed Khaled",
+        "Nadeen Ahmed",
+        "Omima Youssef",
+        "Retaj yasser",
+        "Safaa khaili",
+        "Samar Abdelrazek",
+        "Samira Mostafa",
+        "Shams Ayman",
+        "Wageeda Mohamed",
+        "Yousef sherif",
+        "Youssef Mohamed",
+        "haya gamal",
+      ];
+      let matrixDiv = document.getElementById("matrix");
+      let countdownDiv = document.getElementById("countdown");
+      let progressCircle = document.getElementById("progress-circle");
+      let winnerDiv = document.getElementById("winner-name");
 
-      ['Abdalla Mohamed',
-       'Ahmed Hosni',
-       'Ahmed Maher',
-       'Ahmed Serag',
-       'Andro Amir',
-       'Ashraf Hussien',
-       'Asmaa Mostafa',
-       'Aya Sayed',
-       'Basma Muhammad',
-       'Elsayed Reda',
-       'Eman Abdelhagag',
-       'Fatma khaled',
-       'Hadeer Abd-ElBaset',
-       'Hana nabil',
-       'Lames Ahmed',
-       'Mahmoud abdelhamid',
-       'Manar Sayed',
-       'Mayar Ramadan',
-       'Merna emad',
-       'Mohammed Khaled',
-       'Rahma Abu-AlHassan',
-       'Rahma Mohamed',
-       'Retaj yasser',
-       'Samia ',
-       'Sondos Mohammed',
-       'Wageeda Mohamed',
-       'shams Ayman',
-       'walaa wael'];
-            let matrixDiv = document.getElementById("matrix");
-            let countdownDiv = document.getElementById("countdown");
-            let progressCircle = document.getElementById("progress-circle");
-            let winnerDiv = document.getElementById("winner-name");
+      names.forEach((name) => {
+        let div = document.createElement("div");
+        div.classList.add("name");
+        div.textContent = name;
+        matrixDiv.appendChild(div);
+      });
 
-            names.forEach((name) => {
-              let div = document.createElement("div");
-              div.classList.add("name");
-              div.textContent = name;
-              matrixDiv.appendChild(div);
-            });
+      function startSelection() {
+        let countdown = 10;
+        let drumroll = document.getElementById("drumroll");
+        let cheer = document.getElementById("cheer");
+        drumroll.play();
+        drumroll.loop = true;
+        countdownDiv.textContent = countdown;
 
-            function startSelection() {
-              let countdown = 10;
-              let drumroll = document.getElementById("drumroll");
-              let cheer = document.getElementById("cheer");
-              drumroll.play();
-              drumroll.loop = true;
-              countdownDiv.textContent = countdown;
+        let countdownInterval = setInterval(() => {
+          countdown--;
+          countdownDiv.textContent = countdown;
 
-              let countdownInterval = setInterval(() => {
-                countdown--;
-                countdownDiv.textContent = countdown;
+          let offset = (440 / 10) * (10 - countdown);
+          progressCircle.style.strokeDashoffset = offset;
 
-                let offset = (440 / 10) * (10 - countdown);
-                progressCircle.style.strokeDashoffset = offset;
+          if (countdown === 0) {
+            clearInterval(countdownInterval);
+          }
+        }, 1000);
 
-                if (countdown === 0) {
-                  clearInterval(countdownInterval);
-                }
-              }, 1000);
+        let shuffleInterval = setInterval(() => {
+          let randomIndex = Math.floor(Math.random() * names.length);
+          document
+            .querySelectorAll(".name")
+            .forEach((el) => el.classList.remove("winner"));
+          document
+            .querySelectorAll(".name")
+            [randomIndex].classList.add("winner");
+        }, 200);
 
-              let shuffleInterval = setInterval(() => {
-                let randomIndex = Math.floor(Math.random() * names.length);
-                document
-                  .querySelectorAll(".name")
-                  .forEach((el) => el.classList.remove("winner"));
-                document
-                  .querySelectorAll(".name")
-                  [randomIndex].classList.add("winner");
-              }, 200);
+        setTimeout(() => {
+          clearInterval(shuffleInterval);
+          drumroll.pause();
+          drumroll.currentTime = 0;
+          cheer.play();
+          confetti({ particleCount: 200, spread: 100 });
+          let finalWinner = document.querySelector(".winner").textContent;
+          document.getElementById("countdown-container").style.display = "none";
+          winnerDiv.textContent = `${finalWinner} `;
+        }, 10000);
+      }
 
-              setTimeout(() => {
-                clearInterval(shuffleInterval);
-                drumroll.pause();
-                drumroll.currentTime = 0;
-                cheer.play();
-                confetti({ particleCount: 200, spread: 100 });
-                let finalWinner = document.querySelector(".winner").textContent;
-                document.getElementById("countdown-container").style.display = "none";
-                winnerDiv.textContent = `${finalWinner} `;
-              }, 10000);
-            }
-
-            setTimeout(startSelection, 2000);
+      setTimeout(startSelection, 2000);
     </script>
   </body>
 </html>
