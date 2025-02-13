@@ -21,8 +21,7 @@
         grid-template-columns: repeat(5, 1fr);
         gap: 10px;
         margin: 50px auto;
-        /* width: 50%; */
-        padding: 0 50px;
+        width: 50%;
       }
       .name {
         padding: 15px;
@@ -30,18 +29,20 @@
         color: #003f66;
         font-weight: bold;
         border-radius: 5px;
-        width: 200px;
       }
       .winner {
         background-color: brown !important;
         color: wheat;
       }
+
+      /* Countdown Circle */
       #countdown-container {
         position: relative;
         width: 160px;
         height: 160px;
         margin: 20px auto;
       }
+
       #countdown {
         position: absolute;
         top: 50%;
@@ -51,17 +52,20 @@
         font-weight: bold;
         color: brown;
       }
+
       svg {
-        transform: rotate(-90deg);
+        transform: rotate(-90deg); /* Rotate to start from top */
       }
+
       #progress-circle {
         stroke-linecap: round;
-        stroke-dasharray: 440;
+        stroke-dasharray: 440; /* Full circle */
         stroke-dashoffset: 0;
         transition: stroke-dashoffset 1s linear;
       }
+
       #winner-name {
-        font-size: 70px;
+        font-size: 50px;
         font-weight: bold;
         color: brown;
         margin-top: 20px;
@@ -70,13 +74,15 @@
   </head>
   <body>
     <h1>And The Winner...</h1>
+
+    <!-- Circular Countdown Timer -->
     <div id="countdown-container">
       <svg width="160" height="160">
         <circle
           cx="80"
           cy="80"
           r="70"
-          stroke="gray"
+          stroke="brown"
           stroke-width="10"
           fill="none"
         />
@@ -94,6 +100,7 @@
       </svg>
       <div id="countdown">10</div>
     </div>
+
     <div id="winner-name"></div>
     <div class="matrix" id="matrix"></div>
     <audio id="drumroll" src="drumroll.mp3"></audio>
@@ -101,61 +108,21 @@
 
     <script>
       let names = [
-        "Abdalla Mohamed",
-        "Ahmed Harby",
-        "Ahmed Hosni",
-        "Ahmed Maher",
-        "Ahmed ali",
-        "Ahmed hagag",
-        "Ahmed mohamed",
-        "Andrew Emil",
-        "Anne Marie",
-        "Ashraf Hussien",
-        "Asmaa Mohamed",
-        "Asmaa Mostafa",
-        "Ayman Taha",
-        "Basma Muhammad",
-        "Dina Ashraf",
-        "Ebtihal Mustafa",
-        "Elsayed Reda",
-        "Eman AboAlhagag",
-        "Eman Faiz",
-        "Fatma Ali",
-        "Fatma Nagar",
-        "Hadeer Abd-ElBaset",
-        "Hassan Nasser",
-        "Haya gamal",
-        "Lames Ahmed",
-        "Madeha Fared",
-        "Mahmoud abdelhamid",
-        "Manar Hassan",
-        "Manar Nasser",
-        "Manar Sayed",
-        "Marwa Abdelkareem",
-        "Maryam Khaled",
-        "Maryam Mohamed",
-        "May Alaa",
-        "Mayar Ramadan",
-        "Mazen ahmed",
-        "Merna emad",
-        "Mohammad abdelrazek",
-        "Mohammed Khaled",
-        "Omima Youssef",
-        "Rahma Abu-AlHassan",
-        "Rahma Mohamed",
+        "Wageeda Mohamed ",
+        "Aya sayed",
         "Retaj yasser",
-        "Safaa khalil",
-        "Samira Mostafa",
-        "Shams Ayman",
-        "Sondos Mohammed",
-        "Walaa Wael",
-        "Youssef Mohamed",
-        "zeinab gomaa",
+        "Fatma Khaled",
+        "Lames Ahmed",
+        "Mayar Ramadan",
+        "Maryam Mohamed",
+        "Mazen ahmed",
+        "Ashraf Hussien",
       ];
+
       let matrixDiv = document.getElementById("matrix");
       let countdownDiv = document.getElementById("countdown");
-      let progressCircle = document.getElementById("progress-circle");
       let winnerDiv = document.getElementById("winner-name");
+      let progressCircle = document.getElementById("progress-circle");
 
       names.forEach((name) => {
         let div = document.createElement("div");
@@ -168,14 +135,16 @@
         let countdown = 10;
         let drumroll = document.getElementById("drumroll");
         let cheer = document.getElementById("cheer");
+
         drumroll.play();
+        drumroll.loop = true;
         countdownDiv.textContent = countdown;
 
         let countdownInterval = setInterval(() => {
           countdown--;
           countdownDiv.textContent = countdown;
 
-          let offset = (440 / 10) * (10 - countdown);
+          let offset = (440 / 10) * (10 - countdown); // Reduce border like clock
           progressCircle.style.strokeDashoffset = offset;
 
           if (countdown === 0) {
@@ -199,6 +168,7 @@
           drumroll.currentTime = 0;
           cheer.play();
           confetti({ particleCount: 200, spread: 100 });
+
           let finalWinner = document.querySelector(".winner").textContent;
           document.getElementById("countdown-container").style.display = "none";
           winnerDiv.textContent = `🎉 ${finalWinner} 🎉`;
